@@ -47,7 +47,7 @@ html, body {
 	width: 100%;
 	height: calc(100% - 130px);
 	background-color: #36393E;
-	overflow: auto;
+	word-wrap: break-word;
 }
 
 h1 {
