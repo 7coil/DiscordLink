@@ -1,4 +1,4 @@
-var url = "188.166.149.34:8080";
+var url = "http://188.166.149.34:8080/";
 var socket = io.connect(url);
 var chatDiv = document.getElementById("bkmchat");
 var messages = document.getElementById("bkmmessages");
