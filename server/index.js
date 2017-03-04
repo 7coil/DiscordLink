@@ -13,6 +13,12 @@ app.use(express.static(path.join(__dirname, '../client/')));
 var users = [];
 var channel;
 
+//Set the running game and the avatar for the bot.
+client.on('ready', function() {
+	console.log("Successfully connected to Discord!");
+	client.user.setGame("http://188.166.149.34:8080/");
+});
+
 io.on('connection', function (socket) {
 	socket.on("user", function (data) {
 		//Check if the username is too short/long/invalid
@@ -59,32 +65,26 @@ io.on('connection', function (socket) {
 		//Send to Discord channel
 		channel.send('**' + data.username + '**: ' + data.message);
 	});
+	
+	client.on('message', function(message) {
+		//Split the text into individual command words.
+		let input = message.content.replace( /\n/g, " " ).split(" ");
+		//Stop commands from being run in DMs
+		if (!message.guild) return richSend(message, "Error", "You are not allowed to send commands via Direct Messaging.", "#FF0000");
+		
+		switch(input[0]) {
+			case '!!notdiscord':
+				channel = message.channel
+				message.reply("Selected this channel for NotDiscord.");
+				break;
+			default:
+				socket.broadcast.emit("message", {
+					message: message.content,
+					username: message.author.username
+				});
+				break;
+		}
+	});
 });
 
 server.listen(process.env.PORT || 8080);
-
-//Set the running game and the avatar for the bot.
-client.on('ready', function() {
-	console.log("Successfully connected to Discord!");
-	client.user.setGame("http://188.166.149.34:8080/");
-});
-
-client.on('message', function(message) {
-	//Split the text into individual command words.
-	let input = message.content.replace( /\n/g, " " ).split(" ");
-	//Stop commands from being run in DMs
-	if (!message.guild) return richSend(message, "Error", "You are not allowed to send commands via Direct Messaging.", "#FF0000");
-	
-	switch(input[0]) {
-		case '!!notdiscord':
-			channel = message.channel
-			message.reply("Selected this channel for NotDiscord.");
-			break;
-		default:
-			socket.broadcast.emit("message", {
-				message: message.content,
-				username: message.author.username
-			});
-			break;
-	}
-});
