@@ -6,7 +6,7 @@ var path = require('path');
 var request = require('request');
 var Discord = require('discord.js');
 var client = new Discord.Client();
-client.login(api["discord"]);
+client.login(process.env.DISCORD);
 
 app.use(express.static(path.join(__dirname, '../client/')));
 
