@@ -72,7 +72,7 @@ io.on('connection', function (socket) {
 		//Stop commands from being run in DMs
 		if (!message.guild) return true;
 		//Stop messages from being recieved from itself
-		if (Client.user.id === message.author.id) return true;
+		if (client.user.id === message.author.id) return true;
 		//Stop messages from being recieved from other channels
 		if (channel === message.channel) return true;
 		
