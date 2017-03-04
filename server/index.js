@@ -33,8 +33,11 @@ io.on('connection', function (socket) {
 	socket.on("message", function (data) {
 		let input = data.message.split(" ");
 		
+		//Check if the message is from discordlink
+		if (data.source != "discordlink") {
+			return true;
 		//Check if the Discord channel has been set yet.
-		if (typeof(channel) === 'undefined') {
+		} else if (typeof(channel) === 'undefined') {
 			socket.emit("err", {
 				type: "notify",
 				message: "The Discord TextChannel has currently not been set yet. Please use the (!!DiscordLink) command as an administrator to set a channel."
@@ -58,6 +61,7 @@ io.on('connection', function (socket) {
 		
 		//Do this to prevent sending excess data that may have came from attackers
 		socket.broadcast.emit("message", {
+			source: "discordlink"
 			message: data.message,
 			username: data.username
 		});
@@ -76,6 +80,7 @@ io.on('connection', function (socket) {
 		if (input[0] === '!!discordlink' && (message.channel.permissionsFor(message.member).hasPermission("ADMINISTRATOR") || message.author.id === "190519304972664832")) {
 			channel = message.channel;
 			message.reply("Selected this channel for NotDiscord.");
+			return true;
 		}
 		
 		//Stop messages from being recieved from itself
@@ -85,6 +90,7 @@ io.on('connection', function (socket) {
 		
 		//Transmit Discord message to server
 		socket.broadcast.emit("message", {
+			source: "discord",
 			message: message.content,
 			username: message.author.username
 		});

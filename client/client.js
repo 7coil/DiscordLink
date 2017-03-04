@@ -52,6 +52,7 @@ textbox.addEventListener("keydown", function(event) {
 		messages.innerHTML += escapeHtml(user + ": " + textbox.value) + "<br>";
 		$("#bkmchat").scrollTop($("#bkmchat").height());
 		socket.emit("message", {
+			source: "discordlink",
 			username: user,
 			message: textbox.value
 		});
@@ -65,13 +66,3 @@ upload.addEventListener('change', function() {
 		sendBase64(files[0], files[0].name);
 	}
 });
-
-
-function send(user, message, data) {
-	console.log(message);
-	socket.emit("message", {
-		username: user,
-		message: message,
-		dataTransfer: data
-	});
-}
