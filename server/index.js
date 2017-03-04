@@ -100,7 +100,7 @@ io.on('connection', function (socket) {
 			message.attachments.every(function(element, index) {
 				socket.broadcast.emit("message", {
 					source: "discord",
-					message: "Attachment " + index + ": " + element.url,
+					message: "Attachment: <a href='" + element.url + "'>" + element.url + "</a>",
 					username: message.author.username
 				});
 			});
