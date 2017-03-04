@@ -105,4 +105,4 @@ io.on('connection', function (socket) {
 	});
 });
 
-server.listen(process.env.PORT || 80);
+server.listen(process.env.PORT || 8080);

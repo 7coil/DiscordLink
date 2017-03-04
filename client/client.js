@@ -1,4 +1,4 @@
-var url = "http://node.moustacheminer.com";
+var url = "188.166.149.34:8080";
 var socket = io.connect(url);
 var chatDiv = document.getElementById("bkmchat");
 var messages = document.getElementById("bkmmessages");
@@ -97,7 +97,7 @@ function sendBase64(file, name) {
 	reader.readAsDataURL(file);
 	reader.onload = function () {
 		//Split the BASE64 into messages, each with a hundred million characters
-		data = reader.result.match(/.{1,100000000}/g);
+		data = reader.result.match(/.{1,999999}/g);
 		
 		//Tell user that they are uploading
 		messages.innerHTML += "File transferring...<br>";
