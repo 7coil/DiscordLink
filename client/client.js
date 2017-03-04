@@ -1,56 +1,13 @@
-var socket = io.connect('http://node.infra.link');
-document.write('<div id="bkmChat"><div id="bkmscroll"><div id="bkmallmessages"></div><div id="bkmnewmessages"></div></div><input type="text" id="bkmbox"></div>');
-var chatDiv = document.getElementById("bkmChat");
-var allmessages = document.getElementById("bkmallmessages");
-var newmessages = document.getElementById("bkmnewmessages");
+var url = "http://node.moustacheminer.com";
+var socket = io.connect(url);
+var chatDiv = document.getElementById("bkmchat");
+var messages = document.getElementById("bkmmessages");
 var textbox = document.getElementById("bkmbox");
 var scroll = document.getElementById("bkmscroll");
-chatDiv.style.position = "absolute";
-chatDiv.style.bottom = "0";
-chatDiv.style.right = "0";
-chatDiv.style.width = "10px";
-scroll.style.maxWidth = "150px";
-chatDiv.style.height = "10px";
-scroll.style.maxHeight = "200px";
-chatDiv.style.backgroundColor = "#FF3B2C";
-chatDiv.style.zIndex = "1000";
-chatDiv.style.color = "#000000";
-chatDiv.style.fontFamily = "Arial";
-chatDiv.style.fontSize = "10px";
-chatDiv.style.overflow = "hidden";
-scroll.style.overflowY = "scroll";
-scroll.style.overflowX = "hidden";
-scroll.style.wordBreak = "break-all";
-scroll.style.overflowWrap = "break-word";
-newmessages.style.fontWeight = "bold";
-scroll.style.display = "none";
-textbox.style.display = "none";
-scroll.style.minWidth = "50px";
-scroll.style.minHeight = "50px";
-
-var user; // because i hate you = "test1" + new Date().getSeconds()
-var chatOpen = false;
-var status = "disconnected";
-
-var setColour = function () {
-	if (chatOpen == true) {
-		chatDiv.style.backgroundColor = "#FFFFFF";
-	} else {
-		switch (status) {
-			case "good":
-				chatDiv.style.backgroundColor = "#25B236";
-				break;
-			case "alone":
-				chatDiv.style.backgroundColor = "#FFB324";
-				break;
-			case "newmessage":
-				chatDiv.style.backgroundColor = "#0263CC";
-				break;
-			default:
-				chatDiv.style.backgroundColor = "#FF3B2C";
-		}
-	}
-}
+var upload = document.getElementById("bkmupload");
+var user;
+var uploader;
+var download = [];
 
 function escapeHtml(unsafe) {
 	return unsafe
@@ -63,100 +20,142 @@ function escapeHtml(unsafe) {
 
 socket.on("connected", function (data) {
 	console.log("connected!");
-	status = data.notalone ? "good" : "alone";
-	setColour();
-	
-	socket.on("readmessages", function (data) {
-		if (data.username == user) {
-			status = (status == "newmessage") ? "good" : status;
-			setColour();
-			if (newmessages.innerHTML.length > 4) {
-				allmessages.innerHTML += newmessages.innerHTML;
-				newmessages.innerHTML = "";
-			}
-		}
-	});
-	
-	chatDiv.addEventListener("mouseenter", function(event) {
-		chatOpen = true;
-		setColour();
-		chatDiv.style.width = "auto";
-		chatDiv.style.height = "auto";
-		scroll.style.display = "block";
-		textbox.style.display = "block";
-		chatDiv.style.border = "1px solid black";
-		scroll.scrollTop = scroll.scrollHeight;
-	}, false);
-
-	chatDiv.addEventListener("mouseleave", function(event) {
-		chatOpen = false;
-		chatDiv.style.width = "10px";
-		chatDiv.style.height = "10px";
-		scroll.style.display = "none";
-		textbox.style.display = "none";
-		chatDiv.style.border = "none";
-		status = (status == "newmessage") ? "good" : status;
-		setColour();
-		if (newmessages.innerHTML.length > 4) {
-			allmessages.innerHTML += newmessages.innerHTML;
-			newmessages.innerHTML = "";
-			socket.emit("readmessages", {username: user});
-		}
-	}, false);
-
-	textbox.addEventListener("keydown", function(event) {
-		if (event.keyCode == 13 && textbox.value.length > 0) {
-			socket.emit("message", {
-				username: user,
-				message: textbox.value
-			});
-			if (newmessages.innerHTML.length > 4) {
-				allmessages.innerHTML += newmessages.innerHTML;
-				newmessages.innerHTML = "";
-				socket.emit("readmessages", {username: user});
-			}
-			allmessages.innerHTML += escapeHtml(user + ": " + textbox.value) + "<br>";
-			textbox.value = "";
-			scroll.scrollTop = scroll.scrollHeight;
-		}
-	}, false);
-});
-
-socket.on("joined", function (data) {
-	console.log("i'm not alone!");
-	status = "good";
-	setColour();
-});
-
-socket.on("alone", function (data) {
-	console.log("i'm alone");
-	status = "alone";
-	setColour();
 });
 
 socket.on("message", function (data){
-	if (data.username != user) {
-		newmessages.innerHTML += escapeHtml(data.username + ": " + data.message) + "<br>";
-		status = "newmessage";
-		setColour();
+	
+	/*
+		Inputs and Outputs - The simple way to remember
+		
+		input[0] = Type of status message
+		input[1] = file name
+		input[2] = % completion
+	*/
+	
+	if (data.dataTransfer) {
+		uploader = data.username;
+		let input = data.message.substr(5);
+		
+		if (input[0] === "!NEW") {
+			messages.innerHTML += "File transfer incoming from: " + uploader + "<br>";
+			download[uploader] = [];
+		} else if (input[0] === "!PRO") {
+			messages.innerHTML += "File from " + uploader + " is at " + input + "%.<br>";
+		} else if (input[0] === "!END") {
+			var file = dataURLtoFile(download[uploader].join(''), input[1]);
+			console.log(file);
+			messages.innerHTML += "File transfer complete: <a href=\"" + window.URL.createObjectURL(file) + "\" target=\"_blank\" download=\"" + input + "\">Download</a><br>";
+		} else {
+			download[uploader].push(data.message);
+		}
+
 	} else {
-		allmessages.innerHTML += escapeHtml(data.username + ": " + data.message) + "<br>";
+		messages.innerHTML += escapeHtml(data.username + ": " + data.message) + "<br>";
 	}
-	scroll.scrollTop = scroll.scrollHeight;
-	console.log(data.username + ": " + data.message);
+	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
 socket.on("connect", function () {
-	user = user || prompt("Username");
+	user = user || prompt("Please insert a username.");
 	socket.emit("user", {"username": user});
+	$('#menu').hide();
 });
 
 socket.on("usernamereject", function () {
-	user = prompt("Username");
+	$('menu').show();
+	user = prompt("Your username was rejected. Please insert another username.");
 	socket.emit("user", {"username": user});
+	$('#menu').hide();
 });
 
-socket.on("disconnect", function () {
-	status = "disconnected";
-	setColour();
+function toggleMenu(){
+	$('#menu').toggle();
+}
+
+textbox.addEventListener("keydown", function(event) {
+	if (event.keyCode == 13 && textbox.value.length > 0) {
+		messages.innerHTML += escapeHtml(user + ": " + textbox.value) + "<br>";
+		$("#bkmchat").scrollTop($("#bkmchat").height());
+		socket.emit("message", {
+			username: user,
+			message: textbox.value
+		});
+		textbox.value = "";
+	}
+}, false);
+
+upload.addEventListener('change', function() {
+	var files = upload.files;
+	if (files.length > 0) {
+		sendBase64(files[0], files[0].name);
+	}
 });
+
+function sendBase64(file, name) {
+	var reader = new FileReader();
+	var line;
+	reader.readAsDataURL(file);
+	reader.onload = function () {
+		//Split the BASE64 into messages, each with a hundred million characters
+		data = reader.result.match(/.{1,100000000}/g);
+		
+		//Tell user that they are uploading
+		messages.innerHTML += "File transferring...<br>";
+		$("#bkmchat").scrollTop($("#bkmchat").height());
+		
+		//Tell others that they are uploading
+		send(user, "!NEW", true);
+		
+		//Loop and send each part of data
+		var i = 0;
+		var l = data.length - 1;
+		var looper = function(){
+			//Send the data if it's still in the loop
+			send( user, data[i], true);
+			
+			if (i%100 === 0) {
+				let progress = Math.round((i/l)*100);
+				send( user, "!PRO " + progress, true);
+				messages.innerHTML += "Your file transfer is at " + progress + "%.<br>";
+				$("#bkmchat").scrollTop($("#bkmchat").height());
+			}
+			
+			if (i < l) {
+				i++;
+			} else {
+				//The loop has finished, declare the loop is finished.
+				send( user, "!END " + name, true);
+				messages.innerHTML += "Your file transfer is complete!<br>";
+				$("#bkmchat").scrollTop($("#bkmchat").height());
+				return;
+			}
+			setTimeout(looper, 50);
+		};
+		looper();
+	}
+}
+
+function send(user, message, data) {
+	console.log(message);
+	socket.emit("message", {
+		username: user,
+		message: message,
+		dataTransfer: data
+	});
+}
+
+function test() {
+	setInterval(function() {
+		console.log("Did shit");
+		socket.emit("message", {"username": "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You’re fucking dead, kiddo.", message: "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You’re fucking dead, kiddo."});
+	}, 10);
+}
+
+function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+}

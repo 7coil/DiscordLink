@@ -1,0 +1,54 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial;
+}
+
+html, body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+			
+#nav {
+	height: 65px;
+	width: 100%;
+	background-color: #CCCCCC;
+}
+			
+#toolbar {
+	position: fixed;
+	bottom: 0px;
+	height: 65px;
+	width: 100%;
+	background-color: #DDDDDD;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+
+#toolbaritem {
+	width: 200px;
+	padding: 5px;
+	display: inline-block;
+	text-align: center;
+}
+
+#menu {
+	width: 100%;
+	height: 100%;
+	background-color: #DDDDDD;
+	overflow: auto;
+	padding: 5px;
+}
+
+#bkmchat {
+	width: 100%;
+	height: calc(100% - 130px);
+	background-color: #EEEEEE;
+	overflow: auto;
+}
+
+h1 {
+	font-size: 24pt;
+}
