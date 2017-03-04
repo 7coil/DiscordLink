@@ -33,7 +33,7 @@ socket.on("connect", function () {
 	$('#menu').hide();
 });
 
-socket.on("error", function () {
+socket.on("err", function () {
 	$('menu').show();
 	user = prompt(data.message);
 	socket.emit("user", {"username": user});
