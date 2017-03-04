@@ -94,6 +94,17 @@ io.on('connection', function (socket) {
 			message: message.content,
 			username: message.author.username
 		});
+		
+		//Transmit any attachments
+		if (message.attachments) {
+			message.attachments.every(function(element, index) {
+				source: "discord",
+				message: "Attachment " + index + ": " + element.url,
+				username: message.author.username
+			});
+		}
+		
+
 	});
 });
 
