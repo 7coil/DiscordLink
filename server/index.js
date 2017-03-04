@@ -37,7 +37,7 @@ io.on('connection', function (socket) {
 		if (typeof(channel) === 'undefined') {
 			socket.emit("err", {
 				type: "notify",
-				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
+				message: "The Discord TextChannel has currently not been set yet. Please use the (!!DiscordLink) command as an administrator to set a channel."
 			});
 			return true;
 		//Check if the username is too short/long/invalid
