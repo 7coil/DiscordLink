@@ -37,6 +37,7 @@ socket.on("err", function(data) {
 			user = prompt(data.message);
 			socket.emit("user", {"username": user});
 			$('#menu').hide();
+			break;
 	}
 
 });

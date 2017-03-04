@@ -19,7 +19,7 @@ io.on('connection', function (socket) {
 		if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
 			socket.emit("err", {
 				type: "username",
-				message: "Your message is too long or too short, it does not comply with Discord limits."
+				message: "Your username is too long or too short, it does not comply with Discord limits."
 			});
 			return true;
 		}
@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
 		} else if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
 			socket.emit("err", {
 				type: "username",
-				message: "Your message is too long or too short, it does not comply with Discord limits."
+				message: "Your username is too long or too short, it does not comply with Discord limits."
 			});
 			return true;
 		//Check if the message sent is too short/long/invalid
