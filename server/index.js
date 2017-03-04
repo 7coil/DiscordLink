@@ -61,7 +61,7 @@ io.on('connection', function (socket) {
 		
 		//Do this to prevent sending excess data that may have came from attackers
 		socket.broadcast.emit("message", {
-			source: "discordlink"
+			source: "discordlink",
 			message: data.message,
 			username: data.username
 		});
