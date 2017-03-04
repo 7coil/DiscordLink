@@ -74,7 +74,7 @@ io.on('connection', function (socket) {
 		//Stop messages from being recieved from itself
 		if (client.user.id === message.author.id) return true;
 		//Stop messages from being recieved from other channels
-		if (channel === message.channel) return true;
+		if (channel != message.channel) return true;
 		
 		switch(input[0]) {
 			case '!!notdiscord':
