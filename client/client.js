@@ -29,10 +29,10 @@ socket.on("connect", function () {
 
 socket.on("err", function(data) {
 	switch(data.type) {
-		case: "notify":
+		case "notify":
 			messages.innerHTML += "<b>" + escapeHtml(data.message) + "</b><br>";
 			break;
-		case: "username":
+		case "username":
 			$('menu').show();
 			user = prompt(data.message);
 			socket.emit("user", {"username": user});
