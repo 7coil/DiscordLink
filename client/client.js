@@ -1,5 +1,6 @@
 var url = "http://188.166.149.34:8080/";
 var socket = io.connect(url);
+var textbox = document.getElementById("bkmbox");
 var messages = document.getElementById("bkmmessages");
 var user;
 
