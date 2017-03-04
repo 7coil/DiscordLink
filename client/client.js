@@ -23,35 +23,7 @@ socket.on("connected", function (data) {
 });
 
 socket.on("message", function (data){
-	
-	/*
-		Inputs and Outputs - The simple way to remember
-		
-		input[0] = Type of status message
-		input[1] = file name
-		input[2] = % completion
-	*/
-	
-	if (data.dataTransfer) {
-		uploader = data.username;
-		let input = data.message.substr(5);
-		
-		if (input[0] === "!NEW") {
-			messages.innerHTML += "File transfer incoming from: " + uploader + "<br>";
-			download[uploader] = [];
-		} else if (input[0] === "!PRO") {
-			messages.innerHTML += "File from " + uploader + " is at " + input + "%.<br>";
-		} else if (input[0] === "!END") {
-			var file = dataURLtoFile(download[uploader].join(''), input[1]);
-			console.log(file);
-			messages.innerHTML += "File transfer complete: <a href=\"" + window.URL.createObjectURL(file) + "\" target=\"_blank\" download=\"" + input + "\">Download</a><br>";
-		} else {
-			download[uploader].push(data.message);
-		}
-
-	} else {
-		messages.innerHTML += escapeHtml(data.username + ": " + data.message) + "<br>";
-	}
+	messages.innerHTML += escapeHtml(data.username + ": " + data.message) + "<br>";
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
@@ -61,9 +33,9 @@ socket.on("connect", function () {
 	$('#menu').hide();
 });
 
-socket.on("usernamereject", function () {
+socket.on("error", function () {
 	$('menu').show();
-	user = prompt("Your username was rejected. Please insert another username.");
+	user = prompt(data.message);
 	socket.emit("user", {"username": user});
 	$('#menu').hide();
 });
@@ -91,49 +63,6 @@ upload.addEventListener('change', function() {
 	}
 });
 
-function sendBase64(file, name) {
-	var reader = new FileReader();
-	var line;
-	reader.readAsDataURL(file);
-	reader.onload = function () {
-		//Split the BASE64 into messages, each with a hundred million characters
-		data = reader.result.match(/.{1,999999}/g);
-		
-		//Tell user that they are uploading
-		messages.innerHTML += "File transferring...<br>";
-		$("#bkmchat").scrollTop($("#bkmchat").height());
-		
-		//Tell others that they are uploading
-		send(user, "!NEW", true);
-		
-		//Loop and send each part of data
-		var i = 0;
-		var l = data.length - 1;
-		var looper = function(){
-			//Send the data if it's still in the loop
-			send( user, data[i], true);
-			
-			if (i%100 === 0) {
-				let progress = Math.round((i/l)*100);
-				send( user, "!PRO " + progress, true);
-				messages.innerHTML += "Your file transfer is at " + progress + "%.<br>";
-				$("#bkmchat").scrollTop($("#bkmchat").height());
-			}
-			
-			if (i < l) {
-				i++;
-			} else {
-				//The loop has finished, declare the loop is finished.
-				send( user, "!END " + name, true);
-				messages.innerHTML += "Your file transfer is complete!<br>";
-				$("#bkmchat").scrollTop($("#bkmchat").height());
-				return;
-			}
-			setTimeout(looper, 50);
-		};
-		looper();
-	}
-}
 
 function send(user, message, data) {
 	console.log(message);
@@ -149,13 +78,4 @@ function test() {
 		console.log("Did shit");
 		socket.emit("message", {"username": "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You’re fucking dead, kiddo.", message: "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You’re fucking dead, kiddo."});
 	}, 10);
-}
-
-function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
 }

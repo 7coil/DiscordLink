@@ -4,104 +4,61 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var path = require('path');
 var request = require('request');
+var Discord = require('discord.js');
+var client = new Discord.Client();
+client.login(api["discord"]);
 
 app.use(express.static(path.join(__dirname, '../client/')));
 
 var users = [];
+var channel;
+
 io.on('connection', function (socket) {
 	socket.on("user", function (data) {
-		if (typeof(data.username) != "string") {
-			socket.emit("usernamereject");
+		//Check if the Discord channel has been set yet.
+		if (typeof(channel) === null) {
+			socket.emit("error", {
+				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
+			});
+			return true;
+		//Check if the username is too short/long/invalid
+		} else if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
+			socket.emit("error", {
+				message: "Your message is too long or too short, it does not comply with Discord limits."
+			});
+			return true;
+		//Check if the message sent is too short/long/invalid
+		} else if (data.message != "string" || data.message.length === 0 || data.message.length > 2000) {
+			socket.emit("error", {
+				message: "Your message is too long or too short, it does not comply with Discord limits."
+			});
 			return true;
 		}
-		var user = data.username;
-		if (user == null || user.length < 2 || user.length > 20 || user.indexOf("Server") != -1) {
-			socket.emit("usernamereject");
-		} else {
-			if (users.indexOf(user) == -1) {
-				socket.broadcast.emit("joined", {
-					username: user
-				});
-			}
-			users.push(user);
-			socket.on("disconnect", function (data) {
-				var i = users.indexOf(user);
-				users.splice(i, 1);
-				var unique = users.filter(function(elem, index, self) {
-					return index == self.indexOf(elem);
-				});
-				if (unique.length < 2) {
-					socket.broadcast.emit("alone");
-				}
+	});
+	socket.on("message", function (data) {
+		let input = data.message.split(" ");
+		
+		//Check if the Discord channel has been set yet.
+		if (typeof(channel) === null) {
+			socket.emit("error", {
+				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
 			});
-			var unique = users.filter(function(elem, index, self) {
-				return index == self.indexOf(elem);
+			return true;
+		//Check if the username is too short/long/invalid
+		} else if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
+			socket.emit("error", {
+				message: "Your message is too long or too short, it does not comply with Discord limits."
 			});
-			var notalonebool = unique.length > 1;
-			socket.emit("connected", {
-				notalone: notalonebool
+			return true;
+		//Check if the message sent is too short/long/invalid
+		} else if (data.message != "string" || data.message.length === 0 || data.message.length > 2000) {
+			socket.emit("error", {
+				message: "Your message is too long or too short, it does not comply with Discord limits."
 			});
-			var motd = "Welcome to bkmchat, users currently online: ";
-			for (var i = 0; i < users.length; i++) {
-				motd += users[i];
-				if (i != (users.length - 1)) {
-					motd += ", ";
-				}
-			}
-			socket.emit("message", {
-				username: "Server",
-				message: motd
-			});
-			socket.on("message", function (data) {
-				if (typeof(data.username) != "string" || typeof(data.message) != "string") {
-					return true;
-				}
-				if (data.username.indexOf("Server") != -1) {
-					socket.emit("message", {
-						username: "Server",
-						message: "Don't try to impersonate me"
-					});
-				} else if (data.username == null || data.username.length < 2 || data.username.length > 20) {
-					socket.emit("message", {
-						username: "Server",
-						message: "Your username is too long or too short, it was not delivered."
-					});
-				} else if (data.message == null || data.message.length < 2 || data.message.length > 100) {
-					socket.emit("message", {
-						username: "Server",
-						message: "Your message is too long or too short, it was not delivered."
-					});
-				} else if (data.message.split(" ")[0].toLowerCase() == "/help") {
-					socket.emit("message", {
-						username: "Server",
-						message: "Commands: /list - lists users"
-					});
-				} else if (data.message.split(" ")[0].toLowerCase() == "/list") {
-					var list = "Users currently online: ";
-					for (var i = 0; i < users.length; i++) {
-						list += users[i];
-						if (i != (users.length - 1)) {
-							list += ", ";
-						}
-					}
-					socket.emit("message", {
-						username: "Server",
-						message: list
-					});
-				} else {
-					socket.broadcast.emit("message", data);
-					if (process.env.WEBHOOK) {
-						request.post(process.env.WEBHOOK, {form: {
-							content: data.message,
-							username: data.username
-						}});
-					}
-				}
-			});
-			socket.on("readmessages", function (data) {
-				socket.broadcast.emit("readmessages", data);
-			});
+			return true;
 		}
+		
+		socket.broadcast.emit("message", data);
 	});
 });
 
