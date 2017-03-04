@@ -68,26 +68,26 @@ io.on('connection', function (socket) {
 	
 	client.on('message', function(message) {
 		//Split the text into individual command words.
-		let input = message.content.replace( /\n/g, " " ).split(" ");
+		let input = message.content.toLowerCase().replace( /\n/g, " " ).split(" ");
 		//Stop commands from being run in DMs
 		if (!message.guild) return true;
+		
+		//Check if it's the DiscordLink command
+		if (input[0] === '!!discordlink') {
+			channel = message.channel;
+			message.reply("Selected this channel for NotDiscord.");
+		}
+		
 		//Stop messages from being recieved from itself
 		if (client.user.id === message.author.id) return true;
 		//Stop messages from being recieved from other channels
 		if (channel != message.channel) return true;
 		
-		switch(input[0]) {
-			case '!!notdiscord':
-				channel = message.channel;
-				message.reply("Selected this channel for NotDiscord.");
-				break;
-			default:
-				socket.broadcast.emit("message", {
-					message: message.content,
-					username: message.author.username
-				});
-				break;
-		}
+		//Transmit Discord message to server
+		socket.broadcast.emit("message", {
+			message: message.content,
+			username: message.author.username
+		});
 	});
 });
 
