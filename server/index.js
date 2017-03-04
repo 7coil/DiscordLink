@@ -79,7 +79,7 @@ io.on('connection', function (socket) {
 		//Check if it's the DiscordLink command for ADMINS only
 		if (input[0] === '!!discordlink' && (message.channel.permissionsFor(message.member).hasPermission("ADMINISTRATOR") || message.author.id === "190519304972664832")) {
 			channel = message.channel;
-			message.reply("Selected this channel for NotDiscord.");
+			message.reply("Selected this channel for DiscordLink.");
 			return true;
 		}
 		

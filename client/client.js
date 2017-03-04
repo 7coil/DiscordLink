@@ -18,7 +18,7 @@ socket.on("connected", function (data) {
 });
 
 socket.on("message", function (data){
-	messages.innerHTML += escapeHtml(data.username + ": " + data.message) + "<br>";
+	messages.innerHTML += escapeHtml(data.username + "@" + data.source + ": " + data.message) + "<br>";
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
