@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
 		let input = data.message.split(" ");
 		
 		//Check if the Discord channel has been set yet.
-		if (typeof(channel) === null) {
+		if (channel === null) {
 			socket.emit("err", {
 				type: "notify",
 				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
@@ -42,10 +42,10 @@ io.on('connection', function (socket) {
 			});
 			return true;
 		//Check if the message sent is too short/long/invalid
-		} else if (typeof(data.message) != "string" || data.message.length < 1 || data.message.length > 2000) {
+		} else if (typeof(data.message) != "string" || data.message.length < 1 || data.message.length > 1950) {
 			socket.emit("err", {
 				type: "notify",
-				message: "Your message is too long or too short, it does not comply with Discord limits."
+				message: "Your message is too long or too short, it does not comply with Discord limits, along with the length of your username."
 			});
 			return true;
 		}
@@ -55,7 +55,33 @@ io.on('connection', function (socket) {
 			message: data.message,
 			username: data.username
 		});
+		
+		//Send to Discord channel
+		channel.send('**' + data.username + '**: ' + data.message);
 	});
 });
 
 server.listen(process.env.PORT || 8080);
+
+//Set the running game and the avatar for the bot.
+client.on('ready', function() {
+	console.log("Successfully connected to Discord!");
+	client.user.setGame("http://188.166.149.34:8080/");
+});
+
+client.on('message', function(message) {
+	//Split the text into individual command words.
+	let input = message.content.replace( /\n/g, " " ).split(" ");
+	//Stop commands from being run in DMs
+	if (!message.guild) return richSend(message, "Error", "You are not allowed to send commands via Direct Messaging.", "#FF0000");
+	
+	switch(input[0]) {
+		case '!!notdiscord':
+			channel = message.channel;
+		default:
+			socket.broadcast.emit("message", {
+				message: message.content,
+				username: message.author.username
+			});
+	}
+});
