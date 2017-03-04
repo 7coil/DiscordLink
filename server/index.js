@@ -98,9 +98,11 @@ io.on('connection', function (socket) {
 		//Transmit any attachments
 		if (message.attachments) {
 			message.attachments.every(function(element, index) {
-				source: "discord",
-				message: "Attachment " + index + ": " + element.url,
-				username: message.author.username
+				socket.broadcast.emit("message", {
+					source: "discord",
+					message: "Attachment " + index + ": " + element.url,
+					username: message.author.username
+				});
 			});
 		}
 		
