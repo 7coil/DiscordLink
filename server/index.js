@@ -70,11 +70,15 @@ io.on('connection', function (socket) {
 		//Split the text into individual command words.
 		let input = message.content.replace( /\n/g, " " ).split(" ");
 		//Stop commands from being run in DMs
-		if (!message.guild) return richSend(message, "Error", "You are not allowed to send commands via Direct Messaging.", "#FF0000");
+		if (!message.guild) return true;
+		//Stop messages from being recieved from itself
+		if (Client.user.id === message.author.id) return true;
+		//Stop messages from being recieved from other channels
+		if (channel === message.channel) return true;
 		
 		switch(input[0]) {
 			case '!!notdiscord':
-				channel = message.channel
+				channel = message.channel;
 				message.reply("Selected this channel for NotDiscord.");
 				break;
 			default:
