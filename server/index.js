@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
 		let input = data.message.split(" ");
 		
 		//Check if the Discord channel has been set yet.
-		if (channel === null) {
+		if (typeof(channel) === 'undefined') {
 			socket.emit("err", {
 				type: "notify",
 				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
@@ -77,11 +77,14 @@ client.on('message', function(message) {
 	
 	switch(input[0]) {
 		case '!!notdiscord':
-			channel = message.channel;
+			channel = message.channel
+			message.reply("Selected this channel for NotDiscord.");
+			break;
 		default:
 			socket.broadcast.emit("message", {
 				message: message.content,
 				username: message.author.username
 			});
+			break;
 	}
 });
