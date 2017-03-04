@@ -15,23 +15,10 @@ var channel;
 
 io.on('connection', function (socket) {
 	socket.on("user", function (data) {
-		//Check if the Discord channel has been set yet.
-		if (typeof(channel) === null) {
-			socket.emit("err", {
-				type: "wait",
-				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
-			});
-			return true;
 		//Check if the username is too short/long/invalid
-		} else if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
+		if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
 			socket.emit("err", {
-				type: 
-				message: "Your message is too long or too short, it does not comply with Discord limits."
-			});
-			return true;
-		//Check if the message sent is too short/long/invalid
-		} else if (data.message != "string" || data.message.length === 0 || data.message.length > 2000) {
-			socket.emit("err", {
+				type: "username",
 				message: "Your message is too long or too short, it does not comply with Discord limits."
 			});
 			return true;
@@ -43,18 +30,21 @@ io.on('connection', function (socket) {
 		//Check if the Discord channel has been set yet.
 		if (typeof(channel) === null) {
 			socket.emit("err", {
+				type: "notify",
 				message: "The Discord TextChannel has currently not been set yet. Please use the (!!notdiscord) command as an administrator to set a channel."
 			});
 			return true;
 		//Check if the username is too short/long/invalid
 		} else if (data.username != "string" || data.username.length === 0 || data.username.length > 32) {
 			socket.emit("err", {
+				type: "username",
 				message: "Your message is too long or too short, it does not comply with Discord limits."
 			});
 			return true;
 		//Check if the message sent is too short/long/invalid
 		} else if (data.message != "string" || data.message.length === 0 || data.message.length > 2000) {
 			socket.emit("err", {
+				type: "notify",
 				message: "Your message is too long or too short, it does not comply with Discord limits."
 			});
 			return true;

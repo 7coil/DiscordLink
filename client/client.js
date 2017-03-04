@@ -1,13 +1,7 @@
 var url = "http://188.166.149.34:8080/";
 var socket = io.connect(url);
-var chatDiv = document.getElementById("bkmchat");
 var messages = document.getElementById("bkmmessages");
-var textbox = document.getElementById("bkmbox");
-var scroll = document.getElementById("bkmscroll");
-var upload = document.getElementById("bkmupload");
 var user;
-var uploader;
-var download = [];
 
 function escapeHtml(unsafe) {
 	return unsafe
@@ -33,11 +27,18 @@ socket.on("connect", function () {
 	$('#menu').hide();
 });
 
-socket.on("err", function () {
-	$('menu').show();
-	user = prompt(data.message);
-	socket.emit("user", {"username": user});
-	$('#menu').hide();
+socket.on("err", function(data) {
+	switch(data.type) {
+		case: "notify":
+			messages.innerHTML += "<b>" + escapeHtml(data.message) + "</b><br>";
+			break;
+		case: "username":
+			$('menu').show();
+			user = prompt(data.message);
+			socket.emit("user", {"username": user});
+			$('#menu').hide();
+	}
+
 });
 
 function toggleMenu(){
