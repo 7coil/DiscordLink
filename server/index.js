@@ -16,7 +16,7 @@ var channel;
 //Set the running game and the avatar for the bot.
 client.on('ready', function() {
 	console.log("Successfully connected to Discord!");
-	client.user.setGame("http://chat.infra.link/");
+	client.user.setGame("chat.infra.link");
 });
 
 io.on('connection', function (socket) {
@@ -29,6 +29,7 @@ io.on('connection', function (socket) {
 			});
 			return true;
 		}
+		socket.emit("connected");
 	});
 	socket.on("message", function (data) {
 		let input = data.message.split(" ");
