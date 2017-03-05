@@ -9,19 +9,21 @@
 			<h1>DiscordLink</h1>
 			<i>A HTML5 based chat client designed to link and replicate the funcitonality of Discord</i>
 		</div>
-		
 		<div id="menu">
-			<div id="bkmform">
-				<h2>Welcome to DiscordLink!</h2>
-				<form action="/client/">
-					<p>Username:</p>
-					<input type="text" name="username">
-					<input type="submit" value="Login">
-					<p id="error"></p>
-				</form>
+			<!--This is a cool grey menu to fade the effect from the previous page-->
+		</div>
+		
+		<div id="bkmchat">
+			<div id="bkmmessages">
 			</div>
 		</div>
+		
+		<div id="toolbar">
+			<input type="text" id="bkmbox">
+		</div>
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="login.js"></script>
+		<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+		<script src="client.js"></script>
 	</body>
 </html>    

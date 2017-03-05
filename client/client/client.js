@@ -2,7 +2,8 @@ var url = "http://188.166.149.34:8080/";
 var socket = io.connect(url);
 var textbox = document.getElementById("bkmbox");
 var messages = document.getElementById("bkmmessages");
-var user;
+var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
+var user = params["username"];
 
 function escapeHtml(unsafe) {
 	return unsafe
@@ -28,9 +29,12 @@ socket.on("url", function(data) {
 });
 
 socket.on("connect", function () {
-	user = user || prompt("Please insert a username.");
-	socket.emit("user", {"username": user});
-	$('#menu').hide();
+	if (!user) {
+		$(location).attr('href', '/');
+	} else {
+		socket.emit("user", {"username": user});
+		$('#menu').hide(200);
+	}
 });
 
 socket.on("err", function(data) {
@@ -38,18 +42,16 @@ socket.on("err", function(data) {
 		case "notify":
 			messages.innerHTML += "<b>" + escapeHtml(data.message) + "</b><br>";
 			break;
-		case "username":
-			$('menu').show();
-			user = prompt(data.message);
-			socket.emit("user", {"username": user});
-			$('#menu').hide();
+		case "kick":
+			$('menu').hide(200);
+			$(location).attr('href', '/?error=' + encodeURIComponent(data.message));
 			break;
 	}
 
 });
 
 function toggleMenu(){
-	$('#menu').toggle();
+	$('#menu').toggle(200);
 }
 
 textbox.addEventListener("keydown", function(event) {
