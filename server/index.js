@@ -34,11 +34,8 @@ io.on('connection', function (socket) {
 	socket.on("message", function (data) {
 		let input = data.message.split(" ");
 		
-		//Check if the message is from discordlink
-		if (data.source != "link") {
-			return true;
 		//Check if the Discord channel has been set yet.
-		} else if (typeof(channel) === 'undefined') {
+		if (typeof(channel) === 'undefined') {
 			socket.emit("err", {
 				type: "notify",
 				message: "The Discord TextChannel has currently not been set yet. Please use the (!!DiscordLink) command as an administrator to set a channel."
