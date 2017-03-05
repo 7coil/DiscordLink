@@ -29,7 +29,10 @@ io.on('connection', function (socket) {
 			});
 			return true;
 		}
-		socket.emit("connected");
+		socket.emit("system", {
+			type: "notify",
+			message: "Connected!"
+		});
 	});
 	socket.on("message", function (data) {
 		console.dir(data);
@@ -37,27 +40,27 @@ io.on('connection', function (socket) {
 		
 		//Check if the Discord channel has been set yet.
 		if (typeof(channel) === 'undefined') {
-			socket.emit("err", {
+			socket.emit("system", {
 				type: "notify",
 				message: "The Discord TextChannel has currently not been set yet. Please use the (!!DiscordLink) command as an administrator to set a channel."
 			});
 			return true;
 		//Check if the username is too short/long/invalid
 		} else if (typeof(data.username) != "string" || data.username.length < 1 || data.username.length > 32) {
-			socket.emit("err", {
+			socket.emit("system", {
 				type: "kick",
 				message: "Your username is too long or too short, it does not comply with Discord limits."
 			});
 			return true;
 		//Check if the message sent is too short/long/invalid
 		} else if (typeof(data.message) != "string" || data.message.length < 1 || data.message.length > 1900) {
-			socket.emit("err", {
+			socket.emit("system", {
 				type: "notify",
 				message: "Your message is too long or too short, it does not comply with Discord limits, along with the length of your username."
 			});
 			return true;
 		} else if (typeof(data.source) != "string" || data.message.source < 1 || data.message.source > 1900) {
-			socket.emit("err", {
+			socket.emit("system", {
 				type: "kick",
 				message: "Your source is too long or too short, it does not comply with Discord limits, along with the length of your username."
 			});

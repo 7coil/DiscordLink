@@ -14,17 +14,13 @@ function escapeHtml(unsafe) {
 		.replace(/'/g, "&#039;");
 }
 
-socket.on("connected", function (data) {
-	console.log("connected!");
-});
-
 socket.on("message", function (data){
 	messages.innerHTML += escapeHtml(data.username + "@" + data.source + ": " + data.message) + "<br>";
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
 socket.on("url", function(data) {
-	messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Attachment:") + "<a href='" + data.message.replace(/'/g, "%27").replace(/"/g, "%22") + "'>" + escapeHtml(data.message) + "</a>";
+	messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Attachment:") + "<a href='" + data.message.replace(/'/g, "%27").replace(/"/g, "%22") + "'>" + escapeHtml(data.message) + "</a></br>";
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
@@ -37,7 +33,7 @@ socket.on("connect", function () {
 	}
 });
 
-socket.on("err", function(data) {
+socket.on("system", function(data) {
 	switch(data.type) {
 		case "notify":
 			messages.innerHTML += "<b>" + escapeHtml(data.message) + "</b><br>";
