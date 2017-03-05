@@ -92,7 +92,7 @@ client.on('message', function(message) {
 		if (channel != message.channel) return true;
 		
 		//Transmit Discord message to server
-		socket.broadcast.emit("message", {
+		io.sockets.emit("message", {
 			source: "discord",
 			message: message.content,
 			username: message.author.username
