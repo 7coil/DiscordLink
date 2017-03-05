@@ -54,7 +54,6 @@ function toggleMenu(){
 
 textbox.addEventListener("keydown", function(event) {
 	if (event.keyCode == 13 && textbox.value.length > 0) {
-		messages.innerHTML += escapeHtml(user + ": " + textbox.value) + "<br>";
 		$("#bkmchat").scrollTop($("#bkmchat").height());
 		socket.emit("message", {
 			source: "discordlink",
@@ -64,10 +63,3 @@ textbox.addEventListener("keydown", function(event) {
 		textbox.value = "";
 	}
 }, false);
-
-upload.addEventListener('change', function() {
-	var files = upload.files;
-	if (files.length > 0) {
-		sendBase64(files[0], files[0].name);
-	}
-});
