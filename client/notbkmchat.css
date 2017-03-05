@@ -48,6 +48,7 @@ html, body {
 	height: calc(100% - 130px);
 	background-color: #36393E;
 	word-wrap: break-word;
+	overflow-y: scroll;
 }
 
 h1 {
