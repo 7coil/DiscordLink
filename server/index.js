@@ -98,15 +98,13 @@ io.on('connection', function (socket) {
 		//Transmit any attachments
 		if (message.attachments) {
 			message.attachments.every(function(element, index) {
-				socket.broadcast.emit("message", {
+				socket.broadcast.emit("url", {
 					source: "discord",
-					message: "Attachment: <a href='" + element.url + "'>" + element.url + "</a>",
+					message: element.url,
 					username: message.author.username
 				});
 			});
 		}
-		
-
 	});
 });
 
