@@ -52,17 +52,23 @@ io.on('connection', function (socket) {
 			});
 			return true;
 		//Check if the message sent is too short/long/invalid
-		} else if (typeof(data.message) != "string" || data.message.length < 1 || data.message.length > 1950) {
+		} else if (typeof(data.message) != "string" || data.message.length < 1 || data.message.length > 1900) {
 			socket.emit("err", {
 				type: "notify",
 				message: "Your message is too long or too short, it does not comply with Discord limits, along with the length of your username."
+			});
+			return true;
+		} else if (typeof(data.source) != "string" || data.message.source < 1 || data.message.source > 1900) {
+			socket.emit("err", {
+				type: "kick",
+				message: "Your source is too long or too short, it does not comply with Discord limits, along with the length of your username."
 			});
 			return true;
 		}
 		
 		//Do this to prevent sending excess data that may have came from attackers
 		socket.broadcast.emit("message", {
-			source: "link",
+			source: data.source,
 			message: data.message,
 			username: data.username
 		});
