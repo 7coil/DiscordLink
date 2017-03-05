@@ -23,7 +23,7 @@ html, body {
 #toolbar {
 	position: fixed;
 	bottom: 0px;
-	height: 65px;
+	height: 30px;
 	width: 100%;
 	background-color: #2E3136;
 	overflow-x: auto;
@@ -40,7 +40,7 @@ html, body {
 
 #menu {
 	width: calc(100% - 10px);
-	height: calc(100% - 140px);
+	height: calc(100% - 55px);
 	padding: 5px;
 	background-color: #2E3136;
 	overflow: auto;
@@ -48,7 +48,7 @@ html, body {
 
 #bkmchat {
 	width: calc(100% - 10px);
-	height: calc(100% - 140px);
+	height: calc(100% - 105px);
 	padding: 5px;
 	background-color: #36393E;
 	word-wrap: break-word;

@@ -3,7 +3,7 @@ var socket = io.connect(url);
 var textbox = document.getElementById("bkmbox");
 var messages = document.getElementById("bkmmessages");
 var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
-var user = params["username"];
+var user = decodeURIComponent(params["username"]);
 
 function escapeHtml(unsafe) {
 	return unsafe
