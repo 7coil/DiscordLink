@@ -32,6 +32,7 @@ io.on('connection', function (socket) {
 		socket.emit("connected");
 	});
 	socket.on("message", function (data) {
+		console.dir(data);
 		let input = data.message.split(" ");
 		
 		//Check if the Discord channel has been set yet.
