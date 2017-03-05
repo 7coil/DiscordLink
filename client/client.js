@@ -23,7 +23,7 @@ socket.on("message", function (data){
 });
 
 socket.on("url", function(data) {
-	messages.innerHTML += escapeHtml(data.username + "@" + data.source + "Attachment:") + "<a href='" + element.url.replace(/'/g, "%27").replace(/"/g, "%22") + "'>" + escapeHtml(element.url) + "</a>";
+	messages.innerHTML += escapeHtml(data.username + "@" + data.source + "Attachment:") + "<a href='" + data.message.replace(/'/g, "%27").replace(/"/g, "%22") + "'>" + escapeHtml(data.message) + "</a>";
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
