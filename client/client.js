@@ -55,9 +55,9 @@ function toggleMenu(){
 textbox.addEventListener("keydown", function(event) {
 	if (event.keyCode == 13 && textbox.value.length > 0) {
 		$("#bkmchat").scrollTop($("#bkmchat").height());
-		messages.innerHTML += escapeHtml(user + "@discordlink: " + textbox.value) + "<br>";
+		messages.innerHTML += escapeHtml(user + "@link: " + textbox.value) + "<br>";
 		socket.emit("message", {
-			source: "discordlink",
+			source: "link",
 			username: user,
 			message: textbox.value
 		});
