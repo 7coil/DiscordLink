@@ -21,6 +21,7 @@ client.on('ready', function() {
 
 io.on('connection', function (socket) {
 	socket.on("user", function (data) {
+		console.dir(data);
 		//Check if the username is too short/long/invalid
 		if (typeof(data.username) != "string" || data.username.length < 1 || data.username.length > 32) {
 			socket.emit("err", {
