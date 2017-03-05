@@ -76,7 +76,7 @@ io.on('connection', function (socket) {
 		});
 		
 		//Send to Discord channel
-		channel.send('**' + data.username + '**: ' + data.message);
+		channel.send('**' + data.username + '@' + data.source + '**: ' + data.message);
 	});
 });
 
