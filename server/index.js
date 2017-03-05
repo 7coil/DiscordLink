@@ -34,7 +34,7 @@ io.on('connection', function (socket) {
 		let input = data.message.split(" ");
 		
 		//Check if the message is from discordlink
-		if (data.source != "discordlink") {
+		if (data.source != "link") {
 			return true;
 		//Check if the Discord channel has been set yet.
 		} else if (typeof(channel) === 'undefined') {
@@ -61,7 +61,7 @@ io.on('connection', function (socket) {
 		
 		//Do this to prevent sending excess data that may have came from attackers
 		socket.broadcast.emit("message", {
-			source: "discordlink",
+			source: "link",
 			message: data.message,
 			username: data.username
 		});
