@@ -80,7 +80,7 @@ button, input[type=submit] {
 	border: 0px;
 }
 
-input[type=text] {
+input[type=text], select {
 	background-color: #424549;
 	border: 0px;
 }

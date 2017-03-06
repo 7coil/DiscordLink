@@ -15,7 +15,15 @@
 				<h2>Welcome to DiscordLink!</h2>
 				<p>Username:</p>
 				<input type="text" id="username">
+				<p>Theme Selection:</p>
+				<select id="theme" onchange="changeTheme();">
+					<option value="client">DiscordLink Theme</option>
+					<option value="iframe">iframe Webpage</option>
+				</select>
+				<div id="settings">
+				</div>
 				<p id="error"></p>
+				<button onclick="submit();">Submit</button>
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

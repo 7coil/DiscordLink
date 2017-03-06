@@ -3,8 +3,9 @@ var socket = io.connect(url);
 var textbox = document.getElementById("bkmbox");
 var messages = document.getElementById("bkmmessages");
 var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
-var user = decodeURIComponent(params["username"]);
-
+var config = JSON.parse(decodeURIComponent(params["config"]));
+var user = config["username"];
+								
 function escapeHtml(unsafe) {
 	return unsafe
 		.replace(/&/g, "&amp;")
@@ -43,7 +44,6 @@ socket.on("system", function(data) {
 			$(location).attr('href', '/?error=' + encodeURIComponent(data.message));
 			break;
 	}
-
 });
 
 function toggleMenu(){
