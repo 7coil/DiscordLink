@@ -37,7 +37,7 @@ io.on('connection', function (socket) {
 	});
 	socket.on("message", function (data) {
 		console.dir(data);
-		let input = data.message.split(" ");
+		
 		
 		//Check if the Discord channel has been set yet.
 		if (typeof(channel) === 'undefined') {
@@ -67,8 +67,7 @@ io.on('connection', function (socket) {
 			});
 			return true;
 		}
-		
-		//Do this to prevent sending excess data that may have came from attackers
+		let input = data.message.split(" ");		//Do this to prevent sending excess data that may have came from attackers
 		socket.broadcast.emit("message", {
 			source: data.source,
 			message: data.message,
