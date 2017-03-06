@@ -12,7 +12,6 @@ chatDiv.style.width = "10px";
 scroll.style.maxWidth = "150px";
 chatDiv.style.height = "10px";
 scroll.style.maxHeight = "200px";
-chatDiv.style.backgroundColor = "#FFFFFF";
 chatDiv.style.zIndex = "1000";
 chatDiv.style.fontFamily = "Arial";
 chatDiv.style.fontSize = "10px";
@@ -30,6 +29,7 @@ scroll.style.minHeight = "50px";
 var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
 var config = JSON.parse(decodeURIComponent(params["config"]));
 var user = config["username"];
+document.getElementById('iframe1').src = config["url"] || "http://ictlounge.com/";
 var chatOpen = false;
 var status = "disconnected";
 
