@@ -5,6 +5,7 @@ var io = require('socket.io')(server);
 var path = require('path');
 var request = require('request');
 var Discord = require('discord.js');
+var fs = require('fs');
 var client = new Discord.Client();
 client.login(process.env.DISCORD);
 
@@ -17,6 +18,7 @@ var channel;
 client.on('ready', function() {
 	console.log("Successfully connected to Discord!");
 	client.user.setGame("chat.infra.link");
+	channel = client.channels.get(fs.readFile('channel.txt'));
 });
 
 io.on('connection', function (socket) {
@@ -90,6 +92,7 @@ client.on('message', function(message) {
 		//Check if it's the DiscordLink command for ADMINS only
 		if (input[0] === '!!discordlink' && (message.channel.permissionsFor(message.member).hasPermission("ADMINISTRATOR") || message.author.id === "190519304972664832")) {
 			channel = message.channel;
+			fs.writeFile('channel.txt', message.channel.id);
 			message.reply("Selected this channel for DiscordLink.");
 			return true;
 		}
