@@ -5,13 +5,10 @@ var return_to = getQueryParam('return_to', 'pebblejs://close#');
 if(localStorage['username']) {
 	usernameBox.value = JSON.parse(localStorage['high_contrast']);
 } else {
-	usernameBox.value = "pebble";
+	usernameBox.value = "A Pebble User";
 }
 
 function getConfigData() {
-    var backgroundColorPicker = document.getElementById('background_color_picker');
-    var highContrastCheckbox = document.getElementById('high_contrast_checkbox');
- 
     var options = {
     	'username': usernameBox.value,
     };
