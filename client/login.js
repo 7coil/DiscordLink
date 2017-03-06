@@ -15,7 +15,7 @@ function changeTheme() {
 			$("#settings").empty();
 			break;
 		case "iframe":
-			$("#settings").append('<p>URL:</p>\n<input type="text" id="iframeURL" value="http://www.ictlounge.com/">');
+			$("#settings").append('<p>URL:</p>\n<input type="text" id="iframeURL" value="https://en.wikipedia.org/wiki/Strange_Case_of_Dr_Jekyll_and_Mr_Hyde">');
 			break;
 	}
 }
