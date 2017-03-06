@@ -19,6 +19,7 @@ client.on('ready', function() {
 	console.log("Successfully connected to Discord!");
 	client.user.setGame("chat.infra.link");
 	channel = client.channels.get(fs.readFile('channel.txt'));
+	console.dir(channel);
 });
 
 io.on('connection', function (socket) {
