@@ -16,8 +16,7 @@ function getConfigData() {
     	'username': usernameBox.value,
     };
     // Save for next launch
-    localStorage['background_color'] = options['background_color'];
-    localStorage['high_contrast'] = options['high_contrast'];
+    localStorage['username'] = options['username'];
     console.log('Got options: ' + JSON.stringify(options));
     return options;
 }
