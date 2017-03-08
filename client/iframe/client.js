@@ -8,9 +8,7 @@ var scroll = document.getElementById("bkmscroll");
 chatDiv.style.position = "absolute";
 chatDiv.style.bottom = "0";
 chatDiv.style.right = "0";
-chatDiv.style.width = "10px";
 scroll.style.maxWidth = "150px";
-chatDiv.style.height = "10px";
 scroll.style.maxHeight = "200px";
 chatDiv.style.zIndex = "1000";
 chatDiv.style.fontFamily = "Arial";
@@ -30,6 +28,7 @@ var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){
 var config = JSON.parse(decodeURIComponent(params["config"]));
 var user = config["username"];
 document.getElementById('iframe1').src = config["url"] || "http://ictlounge.com/";
+chatDiv.style.width = chatDiv.style.height = config["size"] || "10px";
 var chatOpen = false;
 var status = "disconnected";
 
@@ -57,8 +56,7 @@ chatDiv.addEventListener("mouseenter", function(event) {
 chatDiv.addEventListener("mouseleave", function(event) {
 	chatOpen = false;
 	chatDiv.style.backgroundColor = "Transparent";
-	chatDiv.style.width = "10px";
-	chatDiv.style.height = "10px";
+	chatDiv.style.width = chatDiv.style.height = config["size"] || "10px";
 	scroll.style.display = "none";
 	textbox.style.display = "none";
 	chatDiv.style.border = "none";

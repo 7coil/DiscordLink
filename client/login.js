@@ -15,7 +15,10 @@ function changeTheme() {
 			$("#settings").empty();
 			break;
 		case "iframe":
-			$("#settings").append('<p>URL:</p>\n<input type="text" id="iframeURL" value="https://en.wikipedia.org/wiki/Strange_Case_of_Dr_Jekyll_and_Mr_Hyde">');
+			$("#settings").append('<p>URL:</p>\n');
+			$("#settings").append('<input type="text" id="iframeURL" value="https://en.wikipedia.org/wiki/Strange_Case_of_Dr_Jekyll_and_Mr_Hyde">\n');
+			$("#settings").append('<p>Corner Button Size (px):</p>\n');
+			$("#settings").append('<input type="number" id="iframeSIZE" value="10" min="10" max="100">\n');
 			break;
 	}
 }
@@ -30,7 +33,8 @@ function submit() {
 		case "iframe":
 			settings = {
 				'username': usernameBox.value,
-				'url': document.getElementById("iframeURL").value
+				'url': document.getElementById("iframeURL").value,
+				'size': document.getElementById("iframeSIZE").value + "px"
 			}
 			break;
 	}
