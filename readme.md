@@ -18,7 +18,8 @@ DiscordLink is a node.js web based program designed to link Discord via rudiment
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
-Some of this code is inherited from BKMCHAT, licenced under the MIT licence.
+Some of this code is inherited from BKMCHAT, licenced under the MIT licence. The portions of code that still exist are licensed under this licence.
+
 https://github.com/comp500/bkmchat
 
 A copy of the licence used (GNU GPLv3, licence.txt) and the MIT licence (MIT, MIT.txt) can be found in their respective files on the root of this repo.
