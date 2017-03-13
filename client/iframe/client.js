@@ -27,6 +27,7 @@ scroll.style.minHeight = "50px";
 var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
 var config = JSON.parse(decodeURIComponent(params["config"]));
 var user = config["username"];
+document.title = config["title"] || "Administrator: C:\\Windows\\System32\\cmd.exe";
 document.getElementById('iframe1').src = config["url"] || "http://ictlounge.com/";
 chatDiv.style.width = chatDiv.style.height = config["size"] || "10px";
 var chatOpen = false;

@@ -14,13 +14,19 @@
 			<div id="bkmform">
 				<h2>Welcome to DiscordLink!</h2>
 				<p>Username:</p>
-				<input type="text" id="username">
+				<input type="text" id="usernameText"><br>
+				<p>Window mode<p>
+				<select id="windowSelect" onchange="changeWindow();">
+					<option value="SameTab">Same Tab</option>
+					<option value="NewTab">New Tab</option>
+					<option value="SmallerWindow">New "smaller" Window</option>
+				</select>
 				<p>Theme Selection:</p>
-				<select id="theme" onchange="changeTheme();">
+				<select id="themeSelect" onchange="changeTheme();">
 					<option value="client">DiscordLink Theme</option>
 					<option value="iframe">iframe Webpage</option>
 				</select>
-				<div id="settings">
+				<div id="themeSettings">
 				</div>
 				<p id="error"></p>
 				<button onclick="submit();">Submit</button>

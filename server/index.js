@@ -92,7 +92,7 @@ client.on('message', function(message) {
 		if (!message.guild) return true;
 		
 		//Check if it's the DiscordLink command for ADMINS only
-		if (input[0] === '!!discordlink' && (message.channel.permissionsFor(message.member).hasPermission("ADMINISTRATOR") || message.author.id === "190519304972664832")) {
+		if (input[0] === '!!discordlink' && (message.channel.permissionsFor(message.member).hasPermission("ADMINISTRATOR") || message.author.id === "190519304972664832" || message.author.id === "114049019227013128")) {
 			channel = message.channel;
 			fs.writeFile('channel.txt', message.channel.id);
 			message.reply("Selected this channel for DiscordLink.");
