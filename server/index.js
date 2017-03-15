@@ -57,13 +57,14 @@ io.on('connection', function (socket) {
 		} else if (typeof(data.message) != "string" || data.message.length < 1 || data.message.length > 1900) {
 			socket.emit("system", {
 				type: "notify",
-				message: "Your message is too long or too short, it does not comply with Discord limits, along with the length of your username."
+				message: "Your message is too long or too short, it does not comply with Discord limits."
 			});
 			return true;
+		//Check if the source sent is too short/long/valid
 		} else if (typeof(data.source) != "string" || data.message.source < 1 || data.message.source > 1900) {
 			socket.emit("system", {
 				type: "kick",
-				message: "Your source is too long or too short, it does not comply with Discord limits, along with the length of your username."
+				message: "The source data sent was too long or too short, please contact the author of this software to fix this error."
 			});
 			return true;
 		}
@@ -128,4 +129,32 @@ app.use(bodyParser.json());
 
 app.post("/POST/", function(req, res) {
 	console.dir(req.body);
+	//Check if the Discord channel has been set yet.
+	if (typeof(channel) === 'undefined') {
+		res.end("Exited with error code: 1");
+		return true;
+	//Check if the username is too short/long/invalid
+	} else if (typeof(req.body.username) != "string" || req.body.username.length < 1 || req.body.username.length > 32) {
+		res.end("Exited with error code: 2");
+		return true;
+	//Check if the message sent is too short/long/invalid
+	} else if (typeof(req.body.message) != "string" || req.body.message.length < 1 || req.body.message.length > 1900) {
+		res.end("Exited with error code: 3");
+		return true;
+	//Check if the source sent is too short/long/valid
+	} else if (typeof(req.body.source) != "string" || req.body.message.source < 1 || req.body.message.source > 1900) {
+		res.end("Exited with error code: 4");
+		return true;
+	}
+	
+	//Do this to prevent sending excess data that may have came from attackers
+	socket.broadcast.emit("message", {
+		source: data.source,
+		message: data.message,
+		username: data.username
+	});
+	
+	//Send to Discord channel
+	channel.send('**' + data.username + '@' + data.source + '**: ' + data.message);
+	res.end("Exited with error code: 0");
 });
