@@ -10,7 +10,7 @@ if (params["error"]) {
 
 function changeTheme() {
 	theme = themeSelect.options[themeSelect.selectedIndex].value;
-	$("#settings").empty();
+	$("#themeSettings").empty();
 	switch (theme) {
 		case "client":
 			$("#themeSettings").empty();
