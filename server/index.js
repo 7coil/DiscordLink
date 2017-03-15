@@ -127,5 +127,5 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.post("/POST/", function(req, res) {
-	console.dir(req);
+	console.dir(req.body);
 });
