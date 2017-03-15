@@ -3,7 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var path = require('path');
-var request = require('request');
+var bodyParser = require('body-parser')
 var Discord = require('discord.js');
 var fs = require('fs');
 var client = new Discord.Client();
@@ -119,6 +119,8 @@ client.on('message', function(message) {
 		});
 	}
 });
+
+app.use(express.bodyParser());
 
 app.use(bodyParser.urlencoded({
 	extended: true
