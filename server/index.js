@@ -120,8 +120,6 @@ client.on('message', function(message) {
 	}
 });
 
-app.use(express.bodyParser());
-
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
