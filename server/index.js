@@ -149,13 +149,13 @@ app.post("/POST/", function(req, res) {
 	
 	//Do this to prevent sending excess data that may have came from attackers
 	io.sockets.emit("message", {
-		source: data.source,
-		message: data.message,
-		username: data.username
+		source: req.body.source,
+		message: req.body.message,
+		username: req.body.username
 	});
 
 	
 	//Send to Discord channel
-	channel.send('**' + data.username + '@' + data.source + '**: ' + data.message);
+	channel.send('**' + req.body.username + '@' + req.body.source + '**: ' + req.body.message);
 	res.end("Exited with error code: 0");
 });
