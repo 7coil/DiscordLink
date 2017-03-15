@@ -148,11 +148,12 @@ app.post("/POST/", function(req, res) {
 	}
 	
 	//Do this to prevent sending excess data that may have came from attackers
-	socket.broadcast.emit("message", {
+	io.sockets.emit("message", {
 		source: data.source,
 		message: data.message,
 		username: data.username
 	});
+
 	
 	//Send to Discord channel
 	channel.send('**' + data.username + '@' + data.source + '**: ' + data.message);
