@@ -18,13 +18,13 @@ var channel;
 client.on('ready', function() {
 	console.log("Successfully connected to Discord!");
 	client.user.setGame("chat.infra.link");
-	if (err) {
-		console.log(err);
-	} else {
-		fs.readFile('channel.txt', 'utf8', function (err, data) {
-			channel = JSON.parse(data).channel;
-		});
-	}
+	fs.readFile('channel.txt', 'utf8', function (err, data) {
+		if (err) {
+			console.log(err);
+		} else {
+				channel = JSON.parse(data).channel;
+		}
+	});
 	console.dir(channel);
 });
 
