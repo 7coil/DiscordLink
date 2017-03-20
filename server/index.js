@@ -7,6 +7,7 @@ var bodyParser = require('body-parser')
 var Discord = require('discord.js');
 var fs = require('fs');
 var client = new Discord.Client();
+var request = require('request').defaults({encoding: null});
 client.login(process.env.DISCORD);
 
 app.use(express.static(path.join(__dirname, '../client/')));
@@ -118,10 +119,24 @@ client.on('message', function(message) {
 	//Transmit any attachments
 	if (message.attachments) {
 		message.attachments.every(function(element, index) {
+			request.get(element.url, function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+					data = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+				}
+			});
+			
+			//Check if the attatchment is an IMAGE
+			var img = !!element.height;
+			
+			//Check if there is a filename.
+			var name = element.filename || "Unnamed File";
+			
 			io.sockets.emit("url", {
 				source: "discord",
-				message: element.url,
-				username: message.author.username
+				message: data,
+				username: message.author.username,
+				img: img,
+				name: name
 			});
 		});
 	}

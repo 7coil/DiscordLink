@@ -21,7 +21,11 @@ socket.on("message", function (data){
 });
 
 socket.on("url", function(data) {
-	messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Attachment:") + "<a href='" + data.message.replace(/'/g, "%27").replace(/"/g, "%22") + "'>" + escapeHtml(data.message) + "</a></br>";
+	if(data.img) {
+		messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Image:" + "<img src='" + data.message + "' + alt='" + data.name + "'></br>";
+	} else {
+		messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Attachment:" + "<a href='" + data.message + "'>" + data.name + "</a></br>";
+	}
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
 
