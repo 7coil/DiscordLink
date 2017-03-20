@@ -18,8 +18,13 @@ var channel;
 client.on('ready', function() {
 	console.log("Successfully connected to Discord!");
 	client.user.setGame("chat.infra.link");
-	channel = client.channels.get(fs.readFile('channel.txt'));
-	console.dir(client.channels);
+	if (err) {
+		console.log(err);
+	} else {
+		fs.readFile('channel.txt', 'utf8', function (err, data) {
+			channel = JSON.parse(data).channel;
+		});
+	}
 	console.dir(channel);
 });
 
@@ -92,7 +97,7 @@ client.on('message', function(message) {
 	//Check if it's the DiscordLink command for ADMINS only
 	if (input[0] === '!!discordlink' && (message.channel.permissionsFor(message.member).hasPermission("ADMINISTRATOR") || message.author.id === "190519304972664832" || message.author.id === "114049019227013128")) {
 		channel = message.channel;
-		fs.writeFile('channel.txt', message.channel.id);
+		fs.writeFile('channel.txt', JSON.stringify(message), 'utf-8');
 		message.reply("Selected this channel for DiscordLink.");
 		return true;
 	}
