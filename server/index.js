@@ -11,7 +11,6 @@ client.login(process.env.DISCORD);
 
 app.use(express.static(path.join(__dirname, '../client/')));
 
-var users = [];
 var channel;
 
 //Set the running game and the avatar for the bot.
@@ -22,10 +21,12 @@ client.on('ready', function() {
 		if (err) {
 			console.log(err);
 		} else {
-				channel = JSON.parse(data).channel;
+			var message = JSON.parse(data);
+			console.dir(message);
+			channel = Client.channels.get(message.channel);
 		}
 	});
-	console.dir(channel);
+	
 });
 
 io.on('connection', function (socket) {
