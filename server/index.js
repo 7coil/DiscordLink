@@ -23,7 +23,7 @@ client.on('ready', function() {
 		} else {
 			var message = JSON.parse(data);
 			console.dir(message);
-			channel = client.channels.get(message.channel);
+			channel = client.channels.get(message.channel.id);
 		}
 	});
 	
