@@ -128,17 +128,19 @@ client.on('message', function(message) {
 			var img = !!element.height;
 			
 			request.get(element.url, function (error, response, body) {
-				if (!error && response.statusCode == 200 && data.length > 400000) {
+				if (!error && response.statusCode == 200 && body.length > 400000) {
 					url = "data:" + response.headers["content-type"] + ";base64," + Buffer.from(body).toString('base64');
 				} else {
 					img = false;
 					url = element.url;
 				}
+				
 				io.sockets.emit("url", {
 					source: "discord",
+					message: data,
 					username: message.author.username,
-					name: name,
-					binary: 
+					img: img,
+					name: name
 				});
 			});
 		});
