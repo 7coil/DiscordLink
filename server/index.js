@@ -120,16 +120,27 @@ client.on('message', function(message) {
 	if (message.attachments) {
 		message.attachments.every(function(element, index) {
 			var data;
-			//Check if the attatchment is an IMAGE
-			var img = !!element.height;
+
 			//Check if there is a filename.
 			var name = element.filename || "Unnamed File";
 			
-			request.get(element.url, function (error, response, body) {
-				if (!error && response.statusCode == 200) {
-					data = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
-				}
-			});
+			//Check if the attatchment is an IMAGE
+			var img = !!element.height;
+			
+			if (img) {
+				request.get(element.url, function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						data = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+						console.log(data);
+					} else {
+						img = false
+						data = element.url
+					}
+				});
+			} else {
+				data = element.url
+			}
+
 
 			io.sockets.emit("url", {
 				source: "discord",
