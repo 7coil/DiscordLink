@@ -22,9 +22,9 @@ socket.on("message", function (data){
 
 socket.on("url", function(data) {
 	if(data.img) {
-		messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Image:" + "<img src='" + data.message + "' + alt='" + data.name + "'></br>";
+		messages.innerHTML += data.username + "@" + data.source + " Image:" + "<img src='" + data.message + "' + alt='" + data.name + "'></br>";
 	} else {
-		messages.innerHTML += escapeHtml(data.username + "@" + data.source + " Attachment:" + "<a href='" + data.message + "'>" + data.name + "</a></br>";
+		messages.innerHTML += data.username + "@" + data.source + " Attachment:" + "<a href='" + data.message + "' target='_blank'>" + data.name + "</a></br>";
 	}
 	$("#bkmchat").scrollTop($("#bkmchat").height());
 });
