@@ -137,7 +137,7 @@ client.on('message', function(message) {
 				
 				io.sockets.emit("url", {
 					source: "discord",
-					message: data,
+					message: url,
 					username: message.author.username,
 					img: img,
 					name: name
