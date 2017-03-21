@@ -119,18 +119,18 @@ client.on('message', function(message) {
 	//Transmit any attachments
 	if (message.attachments) {
 		message.attachments.every(function(element, index) {
+			var data;
+			//Check if the attatchment is an IMAGE
+			var img = !!element.height;
+			//Check if there is a filename.
+			var name = element.filename || "Unnamed File";
+			
 			request.get(element.url, function (error, response, body) {
 				if (!error && response.statusCode == 200) {
 					data = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
 				}
 			});
-			
-			//Check if the attatchment is an IMAGE
-			var img = !!element.height;
-			
-			//Check if there is a filename.
-			var name = element.filename || "Unnamed File";
-			
+
 			io.sockets.emit("url", {
 				source: "discord",
 				message: data,
