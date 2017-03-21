@@ -134,14 +134,13 @@ client.on('message', function(message) {
 					img = false;
 					url = element.url;
 				}
-			});
-
-			io.sockets.emit("url", {
-				source: "discord",
-				message: url,
-				username: message.author.username,
-				img: img,
-				name: name
+				io.sockets.emit("url", {
+					source: "discord",
+					message: url,
+					username: message.author.username,
+					img: img,
+					name: name
+				});
 			});
 		});
 	}
