@@ -1,4 +1,4 @@
-var url = "http://chat.infra.link/";
+var url = window.location.protocol + "//chat.infra.link/";
 var socket = io.connect(url);
 var textbox = document.getElementById("bkmbox");
 var messages = document.getElementById("bkmmessages");
