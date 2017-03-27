@@ -27,7 +27,7 @@ scroll.style.minHeight = "50px";
 var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
 var config = JSON.parse(decodeURIComponent(params["config"]));
 var user = config["username"];
-document.title = config["title"] || "Administrator: C:\\Windows\\System32\\cmd.exe";
+document.title = config["title"] || "[S5] Lee Sin Jungle Gameplay Commentary - Unranked to Diamond - YouTube - Google Chromea.espncdn.com/arcade/prod/games/returnman2/10112010/returnman2_final.swf - Google ChromeABC3 Games - Google ChromeAdobe Flash Player 11Age Of War 2 - Unblocked Games - Google Chromeatari breakout - Google Search - Google ChromeBeat The Boss - Google ChromeBig Head Basketball - unblocked games - Google ChromeBloons Tower Defense 5 - Unblocked Games - Internet ExplorerBloons Tower Defense 5 - Unblocked Games - Google ChromeBloons Tower Defense 5 - Unblocked Games - Internet ExplorerBox Head 2Play - unblocked games - Internet Explorer";
 document.getElementById('iframe1').src = config["url"] || "http://ictlounge.com/";
 chatDiv.style.width = chatDiv.style.height = config["size"] || "10px";
 var chatOpen = false;
