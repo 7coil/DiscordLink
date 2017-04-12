@@ -145,7 +145,7 @@ client.on('message', function(message) {
 					});
 				} catch (err) {
 					io.sockets.emit("system", {
-						type: "notify";
+						type: "notify",
 						message: "Something broke. Maybe cus it was too large!"
 					});
 				}
